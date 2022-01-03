@@ -1,0 +1,1 @@
+		fmt.Println(i * i)
