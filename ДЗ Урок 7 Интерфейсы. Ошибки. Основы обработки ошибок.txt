@@ -1,0 +1,132 @@
+Уровень 1
+Урок 7. Интерфейсы. Ошибки. Основы обработки ошибок
+1. С какими интерфейсами мы уже сталкивались в предыдущих уроках? Обратите внимание на уроки, в которых мы читали из стандартного ввода и писали в стандартный вывод.
+
+https://metanit.com/go/tutorial/8.8.php
+В Go имеется объект os.Stdin, который реализует интерфейс io.Reader
+type Reader interface { 
+    Read(p []byte) (n int, err error) 
+}
+ и позволяет считывать данные с консоли. Например, мы использовали встроенную функцию fmt.Scan() для считывания с консоли с помощью os.Stdin , который реализует интерфейс io.Reader:
+func Scan(a ...interface{}) (n int, err error)
+Эта функция по умолчанию считывает данные с потока os.Stdin
+
+В выходных данных также присутствует ошибка err с  интерфейсом error
+ошибка как интерфейс
+type error interface {
+    Error() string
+}
+
+Аналогично в выходных данных Printf также присутствует ошибка err с  интерфейсом error
+func Printf(format string, a ...interface{}) (n int, err error)
+
+пустой интерфейс interface{}
+
+
+2. Посмотрите примеры кода в своём портфолио. Везде ли ошибки обрабатываются грамотно? Хотите ли вы переписать какие-либо функции?
+
+Вычисление по площади круга его диаметр и длину окружности, необходимо добавить проверку на корректность ввода данных, и если введено не положительное число, то обработать ошибку ввода:
+	fmt.Scanln(&circleAreaInp)
+	//валидация данных
+	circleArea, err := strconv.ParseFloat(circleAreaInp, 64)
+	//обработка ошибки
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	} else if circleArea <= 0 {
+				fmt.Println("Введено отрицательное число")
+		return
+	}
+
+Вычисление всех простых чисел в диапазоне до указанного
+необходимо добавить проверку на корректность ввода данных, и если введено не положительное целое число, то обработать ошибку ввода:
+	fmt.Scanln(&numberInp)
+	//валидация данных
+	number, err := strconv.Atoi(numberInp)
+	//обработка ошибки
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	} else if number <= 0 {
+		fmt.Println("Введено отрицательное число")
+		return
+	}
+
+Аналогично для вычисления числа Фибоначчи при вводе числа членов последовательности Фибоначчи необходимо добавить проверку на корректность ввода данных, и если введено не положительное целое число, то обработать ошибку ввода
+	var n uint
+	var nInp string
+	fmt.Print("введите число членов последовательности Фибоначчи: \n")
+	fmt.Scanln(&nInp)
+	//валидация данных
+	n1, err := strconv.ParseUint(nInp, 10, 64)
+	//обработка ошибки
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	} else if n1 == 0 {
+		fmt.Println("Введено ноль")
+		return
+	}
+	n = uint(n1)
+
+Если хотим абстрагироваться от конкретноги типа геометрической фигуры, то используем интерфейсы:
+
+https://go.dev/play/p/_bjdEy2AbbY
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type Square struct {
+	Side float32
+}
+
+func (s *Square) CalculateArea() float32 {
+	return s.Side * s.Side
+}
+
+type Circle struct {
+	Radius float32
+}
+
+func (c *Circle) CalculateArea() float32 {
+	return math.Pi * c.Radius * c.Radius
+}
+
+type Triangle struct {
+	Base   float32
+	Height float32
+}
+
+func (t *Triangle) CalculateArea() float32 {
+	return 0.5 * t.Base * t.Height
+}
+
+type AreaCalculator interface {
+	CalculateArea() float32
+}
+
+func main() {
+	square := &Square{Side: 4}
+	circle := &Circle{Radius: 5}
+	triangle := &Triangle{Base: 5, Height: 10}
+	
+	for _, shape := range []AreaCalculator{square, circle, triangle} {
+		fmt.Printf("%+v\n", shape) //&{Side:4}, &{Radius:5}, &{Base:5 Height:10}
+		fmt.Println(shape.CalculateArea()) // 16, 78.53982, 25
+	}
+}
+//&{Side:4}
+16
+&{Radius:5}
+78.53982
+&{Base:5 Height:10}
+25
+
+
+
+3. Проверьте себя:
+a. Вам должны быть знакомы следующие ключевые слова Go: interface.
+b. Вам должны быть знакомы следующие функции: panic, recover.
