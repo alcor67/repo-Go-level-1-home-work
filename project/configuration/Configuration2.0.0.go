@@ -140,11 +140,12 @@ func Load() (*myConfig, error) {
 		*/
 		//считываем переменные окружения из файла configuration.env
 		//получаем путь до рабочего каталога
-		path, errG := os.Getwd()
-		if errG != nil {
-			fmt.Printf("Не получен путь до рабочего каталога:  %s\n", errG.Error())
-		}
-
+		/*
+			path, errG := os.Getwd()
+			if errG != nil {
+				fmt.Printf("Не получен путь до рабочего каталога:  %s\n", errG.Error())
+			}
+		*/
 		pathEnv := path + "\\configuration\\configuration.env"
 
 		//считываем переменные окружения из файла configuration.env
