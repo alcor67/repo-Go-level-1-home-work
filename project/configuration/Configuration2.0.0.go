@@ -110,6 +110,10 @@ func Load() (*myConfig, error) {
 			conf.Some_app_id = configJson.MyID
 		}
 
+		if errJson := fileJson.Close(); errJson != nil {
+			fmt.Printf("Ошибка закрытия файла .json: %s\n", errJson.Error())
+		}
+
 	case 2:
 		//считывает конфигурацию из файла yaml
 		if err := yaml.Unmarshal(fileYaml, &configYaml); err != nil {
