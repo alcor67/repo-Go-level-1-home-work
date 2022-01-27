@@ -63,11 +63,11 @@ func Load() (*myConfig, error) {
 	if errG != nil {
 		fmt.Printf("Не получен путь до рабочего каталога:  %s\n", errG.Error())
 	}
-
+	//получаем путь к файлу configuration.json
 	pathJson := path + "\\configuration\\configuration.json"
 	//fmt.Println(pathJson)
 	//fmt.Println(filepath.Ext(pathJson))
-
+	//получаем путь к файлу configuration.yaml
 	pathYaml := path + "\\configuration\\configuration.yaml"
 	//fmt.Println(pathYaml)
 	//fmt.Println(filepath.Ext(pathYaml))
@@ -138,14 +138,7 @@ func Load() (*myConfig, error) {
 			os.Setenv("MY_URL", "http://sentry:9000")
 			os.Setenv("MY_ID", "test")
 		*/
-		//считываем переменные окружения из файла configuration.env
-		//получаем путь до рабочего каталога
-		/*
-			path, errG := os.Getwd()
-			if errG != nil {
-				fmt.Printf("Не получен путь до рабочего каталога:  %s\n", errG.Error())
-			}
-		*/
+		//получаем путь к файлу configuration.env
 
 		pathEnv := path + "\\configuration\\configuration.env"
 
@@ -155,8 +148,6 @@ func Load() (*myConfig, error) {
 		if errL != nil {
 			fmt.Printf("Ошибка открытия файла .env: %s\n", errL.Error())
 		}
-
-		//todo =================
 
 		//читаем и проверяем переменные окружения
 		if varMyPort := os.Getenv("MY_PORT"); varMyPort != "" && conf.MyPort == "" {
@@ -196,16 +187,6 @@ func Load() (*myConfig, error) {
 
 	return conf, err
 
-	//валидация значений флагов
-	err = conf.validation()
-
-	//обработка ошибки валидации значений флагов
-	if err != nil {
-		fmt.Printf("конфигурация не загружена: \n")
-		return conf, err
-	}
-
-	return conf, err
 }
 
 func (c *myConfig) validation() error {
