@@ -1,0 +1,1 @@
+﻿go test --bench=. --benchmem --benchtime=10000000x > benchmark.txt
