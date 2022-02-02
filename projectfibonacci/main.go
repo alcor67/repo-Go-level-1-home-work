@@ -9,8 +9,6 @@ import (
 	"github.com/alcor67/repo-Go-level-1-home-work/projectfibonacci/fibonacci"
 )
 
-//var i uint = 0
-
 func main() {
 	var n uint
 	var nInp string
