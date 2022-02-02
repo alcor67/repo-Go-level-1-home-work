@@ -15,7 +15,7 @@ func BenchmarkSampleSort(b *testing.B) {
 	arrIncr := arr
 	arrDecr := arr
 
-	b.ResetTimer() //Теперь начальная настройка не будет учтена в результатах
+	b.ResetTimer() 
 	for i := 0; i < b.N; i++ {
 
 		sort.Slice(arrIncr, func(i, j int) bool { return arrIncr[i] < arrIncr[j] })

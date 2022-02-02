@@ -13,25 +13,25 @@ var lenArry = uint(len(fibNumAarr))
 
 func TestTestifyFibonacci(t *testing.T) {
 
-	ExpectedArr, err := getFibArry(lenArry)
+	ReceivedArr, err := getFibArry(lenArry)
 	if err != nil {
 		t.Errorf("arry  expected to return no error, but received error")
 	}
 
-	assert.Equal(t, ExpectedArr, fibNumAarr, "they should be equal")
+	assert.Equal(t, fibNumAarr, ReceivedArr, "they should be equal")
 }
 
 func getFibArry(lenArry uint) ([]uint64, error) {
 
-	ExpectedArr := make([]uint64, lenArry)
+	receivedArr := make([]uint64, lenArry)
 	var i uint = 0
 	for i = 0; i < lenArry; i++ {
 
-		Expected, err := fibonacci.FibWrap(true)
+		received, err := fibonacci.FibWrap(true)
 		if err != nil {
-			return ExpectedArr, errors.New("arry  expected to return no error, but received error")
+			return receivedArr, errors.New("arry  expected to return no error, but received error")
 		}
-		ExpectedArr[i] = Expected(i)
+		receivedArr[i] = received(i)
 	}
-	return ExpectedArr, nil
+	return receivedArr, nil
 }

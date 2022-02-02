@@ -8,12 +8,12 @@ import (
 )
 
 func main() {
-	//ввод слайса пользователем
+	
 	fmt.Println("введите массив целых чисел:\n")
 	arr := sortarray.GetSlice()
-	//arr := []int64{-1, 0, 3, 4, 0, 1, 2, 5, 7, -1, 9}
+	
 	fmt.Println(arr)
-	//arr := []int64{-1, 0, 3, 4, 0, 1, 2, 5, 7, -1}
+	
 	fmt.Println("исходный массив:\n", arr)
 	fmt.Println("введите направление сортировки массива:\n",
 		"'+' сортировка по увеличению значений элементов массива\n",
@@ -35,19 +35,3 @@ func main() {
 	}
 
 }
-
-/*
-//функция ввод слайса пользователем
-func GetSlice() []int64 {
-	inputNums := []int64{}
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		num, err := strconv.ParseInt(scanner.Text(), 10, 64)
-		if err != nil {
-			break
-		}
-		inputNums = append(inputNums, num)
-	}
-	return inputNums
-}
-*/

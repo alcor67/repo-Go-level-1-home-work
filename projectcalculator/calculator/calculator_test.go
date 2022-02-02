@@ -9,16 +9,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCalcSmoke(t *testing.T) { // входная переменная типа *testing.T
+func TestCalcSmoke(t *testing.T) {
 
-	Expected, err := calculator.Calc("+", 100, 200)
+	received, err := calculator.Calc("+", 100, 200)
 	if err != nil {
 		t.Errorf("Calc(+ 100 200) expected to return no error, but received: %s", err)
 	}
 
 	expected := 300.0
-	if Expected != expected {
-		t.Errorf("Calc(+ 100 200) expected to return %.2f, but receive %.2f", expected, Expected)
+	if received != expected {
+		t.Errorf("Calc(+ 100 200) expected to return %.2f, but receive %.2f", expected, received)
 	}
 }
 
@@ -63,24 +63,22 @@ func TestTestifyCalc(t *testing.T) {
 	var X float64 = 4
 	var Y float64 = 2
 	Op := "**"
-	var Expected float64 = 16
+	var expected float64 = 16
 
-	result, err := calculator.Calc(Op, X, Y)
+	received, err := calculator.Calc(Op, X, Y)
 	fnCallStr := fmt.Sprintf("Calc (%.2f %s %.2f)", X, Op, Y)
 	if err != nil {
 		t.Errorf("%s expected to return no error, but received: %s", fnCallStr, err)
-		//continue
+
 	}
 
-	assert.Equal(t, result, Expected, "they should be equal")
-
+	assert.Equal(t, expected, received, "they should be equal")
 }
 
 func TestCalcTableOk(t *testing.T) {
-	//fmt.Println("запускаем TestCalcTableOk")
 	type call struct {
 		Op             string
-		X, Y, Expected float64
+		X, Y, expected float64
 	}
 
 	calls := []call{
@@ -135,34 +133,22 @@ func TestCalcTableOk(t *testing.T) {
 		{"**", 0, 2, 0},
 		{"**", 0, 0, 1},
 		{"**", 4, -.3, math.Pow(4, -.3)},
-
-		//todo: make tests on values of NaN (special cases)
-		//{"**", -4, 1.4, math.Pow(-4, 1.4)},
-		//{"**", -4, -.4, math.Pow(-4, -.4)},
-		//todo: make tests on values of Inf (edge cases)
-		//{"**", 0, -.1, math.Pow(0, -.1)},
-		//{"**", 0, -2, math.Pow(0, -2)},
-
-		//todo: make tests on Maximum values of float (edge cases)
-		//{"+", math.MaxFloat64, 100, math.MaxFloat64 + 100},
 	}
 
 	for _, c := range calls {
 		fnCallStr := fmt.Sprintf("Calc (%.2f %s %.2f)", c.X, c.Op, c.Y)
 
-		result, err := calculator.Calc(c.Op, c.X, c.Y)
+		received, err := calculator.Calc(c.Op, c.X, c.Y)
 		if err != nil {
 			t.Errorf("%s expected to return no error, but received: %s", fnCallStr, err)
-			//continue
 		}
-		if result != c.Expected {
-			t.Errorf("%s expected to return %.2f, but receive %.2f", fnCallStr, c.Expected, result)
+		if received != c.expected {
+			t.Errorf("%s expected to return %.2f, but receive %.2f", fnCallStr, c.expected, received)
 		}
 	}
 }
 
 func TestCalcTableFailure(t *testing.T) {
-	//fmt.Println("запускаем TestCalcTableFailure")
 	type call struct {
 		Op   string
 		X, Y float64
@@ -193,7 +179,6 @@ func TestCalcTableFailure(t *testing.T) {
 		_, err := calculator.Calc(c.Op, c.X, c.Y)
 		if err == nil {
 			t.Errorf("%s expected to return error, but received no error", fnCallStr)
-			//continue
 		}
 	}
 }

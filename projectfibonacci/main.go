@@ -6,8 +6,6 @@ import (
 	"os"
 	"strconv"
 
-	//"time"
-
 	"github.com/alcor67/repo-Go-level-1-home-work/projectfibonacci/fibonacci"
 )
 
@@ -18,9 +16,8 @@ func main() {
 	var nInp string
 	fmt.Print("введите число членов последовательности Фибоначчи: \n")
 	fmt.Scanln(&nInp)
-	//валидация данных
 	n1, err := strconv.ParseUint(nInp, 10, 64)
-	//обработка ошибки
+
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -29,37 +26,20 @@ func main() {
 		return
 	}
 	n = uint(n1)
-	//присваиваем значение переменной getFibNum функцию обертку для замыкания,
-	//которая будет возвращать функцию считающую число Фибоначчи
-	getFibNumCahe, err := fibonacci.FibWrap(true) // с кешем
+
+	getFibNumCahe, err := fibonacci.FibWrap(true)
 	if err != nil {
 		fmt.Println("arry %+v expected to return no error, but received: %s", getFibNumCahe, err)
 		os.Exit(1)
 	}
-	//getFibNumNoCahe := fibonacci.FibWrap()   // без кеша
 
-	//ставим замер времении
-	//now := time.Now()
 	fmt.Println("число Фибоначчи: ", getFibNumCahe(n-1))
 	ExpectedArr, err := getFibArry(n)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	fmt.Println(ExpectedArr)
-	//fmt.Println("количество итераций с кешем: ", i)
-	//выводим замер времении
-
-	//fmt.Printf("время рассчета с кешем: %d ms\n", time.Since(now).Milliseconds())
-	/*
-		i = 0 // обнуляем счетчик итераций
-		now = time.Now()
-	*/
-	//fmt.Println("число Фибоначчи: ", getFibNumNoCahe(n))
-	/*
-		fmt.Println("количество итераций без кеша: ", i)
-		fmt.Printf("время рассчета без кеша: %d ms\n", time.Since(now).Milliseconds())
-	*/
+	fmt.Println("Ряд Фибоначчи: ",ExpectedArr)
 }
 
 func getFibArry(lenArry uint) ([]uint64, error) {

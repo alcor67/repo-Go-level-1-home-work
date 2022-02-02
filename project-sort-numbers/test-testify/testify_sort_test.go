@@ -4,6 +4,9 @@ import (
 	"sort"
 	"testing"
 
+	"math/rand"
+	"time"
+
 	"github.com/stretchr/testify/assert"
 
 	"github.com/alcor67/repo-Go-level-1-home-work/project-sort-numbers/sortarray"
@@ -12,15 +15,13 @@ import (
 func TestTestifySort(t *testing.T) {
 
 	arr := []int64{-1, 2, -3, 4}
-	arrTest := []int64{-3, -1, 2, 4}
+	expected := []int64{-3, -1, 2, 4}
 
 	direction := "+"
-	Expected, err := sortarray.GetInsertSort(arr, direction)
-	// assert equality Testify
-	assert.Equal(t, Expected, arrTest, "they should be equal")
-	if err != nil {
-		t.Errorf("expected to return no error, but received: %s", err)
-	}
+	received, _ := sortarray.GetInsertSort(arr, direction)
+
+	assert.Equal(t, received, expected, "they should be equal")
+
 }
 
 func TestTestifySortTableOk(t *testing.T) {
@@ -43,12 +44,11 @@ func TestTestifySortTableOk(t *testing.T) {
 	}
 
 	for _, c := range calls {
-		expected, err := sortarray.GetInsertSort(c.Arr, c.Direction)
+		received, err := sortarray.GetInsertSort(c.Arr, c.Direction)
 		if err != nil {
 			t.Errorf("expected to return no error, but received: %s", err)
 		}
-		// assert equality Testify
-		assert.Equal(t, expected, c.Expected, "they should be equal")
+		assert.Equal(t, received, c.Expected, "they should be equal")
 	}
 }
 
@@ -72,12 +72,11 @@ func TestTestifySortTableFailure(t *testing.T) {
 	}
 
 	for _, c := range calls {
-		expected, err := sortarray.GetInsertSort(c.Arr, c.Direction)
+		received, err := sortarray.GetInsertSort(c.Arr, c.Direction)
 		if err != nil {
 			t.Errorf("expected to return no error, but received: %s", err)
 		}
-		// assert equality Testify
-		assert.NotEqual(t, expected, c.Expected, "they should not be equal")
+		assert.NotEqual(t, received, c.Expected, "they should not be equal")
 	}
 }
 
@@ -88,28 +87,17 @@ func TestTestifySortGlobal(t *testing.T) {
 		Expected  []int64
 	}
 
-	for i := 0; i < 1; i++ {
-		randSlice, _ := sortarray.GetRandSlice()
+	for i := 0; i < 100; i++ {
+		randSlice, _ := getRandSlice()
 
-		//копируем слайсы
 		verifiedRandSliseIncr := make([]int64, len(randSlice))
 		copy(verifiedRandSliseIncr, randSlice)
 
 		verifiedRandSliseDecr := make([]int64, len(randSlice))
 		copy(verifiedRandSliseDecr, randSlice)
-		//если поломаем тест
-		/*
-			fmt.Println("verifiedRandSliseDecr[0]", verifiedRandSliseDecr[0])
-			verifiedRandSliseDecr[0] += 1
-			fmt.Println("verifiedRandSliseDecr[0]", verifiedRandSliseDecr[0])
-		*/
+
 		sort.Slice(verifiedRandSliseIncr, func(i, j int) bool { return verifiedRandSliseIncr[i] < verifiedRandSliseIncr[j] })
-		//если поломаем тест
-		/*
-			fmt.Println("verifiedRandSliseIncr[0]", verifiedRandSliseIncr[0])
-			verifiedRandSliseIncr[0] += 1
-			fmt.Println("verifiedRandSliseIncr[0]", verifiedRandSliseIncr[0])
-		*/
+
 		sort.Slice(verifiedRandSliseDecr, func(i, j int) bool { return verifiedRandSliseDecr[i] > verifiedRandSliseDecr[j] })
 
 		calls := []call{
@@ -127,12 +115,44 @@ func TestTestifySortGlobal(t *testing.T) {
 		}
 
 		for _, c := range calls {
-			expected, err := sortarray.GetInsertSort(c.Arr, c.Direction)
+			received, err := sortarray.GetInsertSort(c.Arr, c.Direction)
 			if err != nil {
 				t.Errorf("expected to return no error, but received: %s", err)
 			}
-			// assert equality Testify
-			assert.Equal(t, expected, c.Expected, "they should be equal")
+			assert.Equal(t, received, c.Expected, "they should be equal")
 		}
 	}
+}
+
+func getRandSlice() ([]int64, error) {
+	var randNumber int64
+	inputNums := []int64{}
+	rand.Seed(getRandSeed())
+	cycleLen := rand.Intn(10000)
+
+	for i := 0; i < cycleLen; i++ {
+
+		rand.Seed(getRandSeed())
+		randNumberNew := rand.Int63()
+
+		if randNumber == randNumberNew {
+			continue
+		}
+		randNumber = randNumberNew
+		randOutPut := (randNumber/1e15 - 5000) * 2
+		inputNums = append(inputNums, randOutPut)
+	}
+	return inputNums, nil
+}
+
+func getRandSeed() int64 {
+	var randSeed int64 = 0
+	timeNano := time.Now().UnixNano()
+
+	randSeedNew := int64(timeNano-timeNano/1e6*1e6) / 10
+
+	if randSeed != randSeedNew {
+		randSeed = randSeedNew
+	}
+	return randSeed
 }
